@@ -6,6 +6,8 @@
   --purpleHaze: #a49fc8;
   --siphon: #100030;
   --sohoLights: #f050f8;
+  --product: #10002f;
+  --background: #170048;
 }
 
 html,
@@ -17,7 +19,24 @@ body {
 }
 
 body {
+  padding: 0;
   background: var(--siphon);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  width: 100%;
+  display: block;
+  margin: auto;
 }
 
 .home {
@@ -27,4 +46,59 @@ body {
   justify-content: center;
   height: 100vh;
   margin: 0 auto;
+}
+
+.header-product {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 80px;
+  margin-top: 40px;
+}
+
+.header-product h1 {
+  margin-left: 20px;
+}
+
+.header-product h1 img {
+  max-width: 380px;
+  width: 26vw;
+  min-width: 200px;
+}
+.basket {
+  cursor: pointer;
+  margin-right: 20px;
+  position: relative;
+}
+.basket img {
+  max-width: 65px;
+  min-width: 20px;
+  width: 10vw;
+}
+
+.basket-count {
+  background: var(--sohoLights);
+  color: var(--ice);
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  text-align: center;
+  top: -10px;
+  right: 0;
+}
+
+.slick-slider {
+  max-width: 414px;
+  width: 100%;
+  margin: auto;
+  display: block;
+}
+
+.container-flex {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }

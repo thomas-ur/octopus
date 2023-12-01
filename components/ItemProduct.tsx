@@ -1,11 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import db from '../../server/db'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
+import db from '../server/db'
 
 export default function ItemProduct({ updateBasketCount }) {
-  const [products, setProducts] = useState(db.products)
+  const [products] = useState(db.products)
 
   const [cart, setCart] = useState([])
 
@@ -35,8 +32,8 @@ export default function ItemProduct({ updateBasketCount }) {
   }
 
   // Update basket count in the basket in Product
-  const addToBasket = (basketCount) => {
-    updateBasketCount(basketCount + 1)
+  const addToBasket = (count) => {
+    updateBasketCount(count)
   }
 
   useEffect(() => {
@@ -50,86 +47,86 @@ export default function ItemProduct({ updateBasketCount }) {
 
   return (
     <Fragment>
-      <Slider arrows={false}>
-        {products &&
-          products.map((product) => (
-            <div className='product' key={product.id}>
-              <div className='itemProduct'>
-                <div className='product-image'>
-                  <img src={product.img_url} alt={product.name} />
+      {products &&
+        products.map((product) => (
+          <div className='product' key={product.id}>
+            <div className='itemProduct'>
+              <div className='product-image'>
+                <img src={product.img_url} alt={product.name} />
+              </div>
+              <div className='product-title'>
+                <h1>{product.name}</h1>
+                <h6>
+                  {product.power} W // Packet of {product.quantity}
+                </h6>
+              </div>
+              <div className='container-flex'>
+                <div className='product-price'>
+                  <h2>£ {formatPrice(product.price)}</h2>
                 </div>
-                <div className='product-title'>
-                  <h1>{product.name}</h1>
-                  <h6>
-                    {product.power} W // Packet of {product.quantity}
-                  </h6>
-                </div>
-                <div className='container-flex'>
-                  <div className='product-price'>
-                    <h2>£ {formatPrice(product.price)}</h2>
-                  </div>
-                  <div className='product-buttons'>
-                    <button
-                      className='product-buttons add'
-                      onClick={() => addToCart(product.id)}>
-                      +
-                    </button>
-                    <p className='product-buttons-result'>
-                      {' '}
-                      <span>QYT</span>
-                      {cart.length}
-                    </p>
-                    <button
-                      className='product-buttons remove'
-                      onClick={() => removeFromCart(product.id)}>
-                      -
-                    </button>
-                  </div>
-                </div>
-                <div className='product-add-basket'>
-                  <button onClick={() => addToBasket(cart.length)}>
+                <div className='product-buttons'>
+                  <button
+                    className={`product-buttons remove ${cart.length === 1 ? 'disabled' : ''}`}
+                    onClick={() => removeFromCart(product.id)} disabled={cart.length === 1}>
+                    -
+                  </button>
+                  <p
+                    className='product-buttons-result'
+                    title='Current quantity'>
                     {' '}
-                    Ajouter au panier
+                    <span>QYT</span>
+                    {cart.length}
+                  </p>
+                  <button
+                    className='product-buttons add'
+                    onClick={() => addToCart(product.id)}>
+                    +
                   </button>
                 </div>
               </div>
-              <div className='product-container background'>
-                <h2>Description</h2>
-                <p>{product.description}</p>
-              </div>
-              <div className='product-container'>
-                <h2>Specification</h2>
-                <p>
-                  {' '}
-                  Brand <span>{product.brand}</span>
-                </p>
-                <p>
-                  {' '}
-                  Item weight <span>{product.weight}</span>
-                </p>
-                <p>
-                  {' '}
-                  Dimensions{' '}
-                  <span>
-                    {product.height} {product.width} {product.length}
-                  </span>
-                </p>
-                <p>
-                  {' '}
-                  Color <span>{product.colour}</span>
-                </p>
-              </div>
-              <div className='product-container background notabene'>
-                <p>
-                  Octopus Energy Ltd is a company registered in England and
-                  Wales. Registered number: 09263424. Registered office: 33
-                  Holborn, London, ECIN 2HT. Trading office: 20-24 Broadwick
-                  Street, London, WIF 8HT
-                </p>
-              </div>
+              <button
+                className='product-add-basket'
+                onClick={() => addToBasket(cart.length)}>
+                {' '}
+                Add to cart
+              </button>
             </div>
-          ))}
-      </Slider>
+            <div className='product-container background'>
+              <h2>Description</h2>
+              <p>{product.description}</p>
+            </div>
+            <div className='product-container'>
+              <h2>Specification</h2>
+              <p>
+                {' '}
+                Brand <span>{product.brand}</span>
+              </p>
+              <p>
+                {' '}
+                Item weight <span>{product.weight}</span>
+              </p>
+              <p>
+                {' '}
+                Dimensions{' '}
+                <span>
+                  {product.height} {product.width} {product.length}
+                </span>
+              </p>
+              <p>
+                {' '}
+                Color <span>{product.colour}</span>
+              </p>
+            </div>
+            <div className='product-container background notabene'>
+              <p>
+                Octopus Energy Ltd is a company registered in England and Wales.
+                Registered number: 09263424. Registered office: 33 Holborn,
+                London, ECIN 2HT. Trading office: 20-24 Broadwick Street,
+                London, WIF 8HT
+              </p>
+            </div>
+          </div>
+        ))}
     </Fragment>
   )
 }
