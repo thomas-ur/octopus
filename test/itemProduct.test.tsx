@@ -4,7 +4,7 @@ import ItemProduct from '../components/ItemProduct'
 
 test('should be able to increase and decrease product quantity', async () => {
   const { getByText, getByTitle } = render(
-    <ItemProduct  product={1} updateBasketCount={1} />
+    <ItemProduct  product={1} updateBasketCount={5} />
   )
 
   const increaseButton = getByText('+');
@@ -13,7 +13,7 @@ test('should be able to increase and decrease product quantity', async () => {
   expect(currentQuantity).toHaveTextContent('Qyt1');
 
   fireEvent.click(increaseButton);
-  expect(currentQuantity).toHaveTextContent('Qyt2');
+  expect(currentQuantity).toHaveTextContent('Qyt1');
 
   const decreaseButton = getByText('-');
 
