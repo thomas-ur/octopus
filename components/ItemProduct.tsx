@@ -1,26 +1,38 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import db from '../server/db'
 
-export default function ItemProduct({ updateBasketCount }) {
-  const [products] = useState(db.products)
-
-  const [cart, setCart] = useState([])
+export default function ItemProduct({ product, updateBasketCount }) {
+  const [cart, setCart] = useState([product])
+  const [quantity, setQuantity] = useState(1)
 
   // Function to add a product to the cart
-  const addToCart = (productId) => {
-    const productToAdd = products.find((product) => product.id === productId)
+  const addToCart = () => {
+    const existingProductIndex = cart.findIndex(
+      (item) => item.id === product.id
+    )
 
-    if (productToAdd) {
-      setCart([...cart, productToAdd])
+    if (existingProductIndex !== -1) {
+      const updatedCart = [...cart]
+      updatedCart[existingProductIndex].quantity += 1
+      setCart(updatedCart)
+      setQuantity(updatedCart[existingProductIndex].quantity)
+    } else {
+      const updatedProduct = { ...product, quantity: 1 }
+      setCart([...cart, updatedProduct])
+      setQuantity(1)
     }
   }
 
   // Function to remove a product from the cart
-  const removeFromCart = (productId) => {
-    const index = cart.findIndex((product) => product.id === productId)
-    if (index !== -1) {
-      const updatedCart = [...cart.slice(0, index), ...cart.slice(index + 1)]
+  const removeFromCart = () => {
+    const existingProductIndex = cart.findIndex(
+      (item) => item.id === product.id
+    )
+
+    if (existingProductIndex !== -1) {
+      const updatedCart = [...cart]
+      updatedCart[existingProductIndex].quantity = Math.max(1, quantity - 1)
       setCart(updatedCart)
+      setQuantity(updatedCart[existingProductIndex].quantity)
     }
   }
 
@@ -31,14 +43,15 @@ export default function ItemProduct({ updateBasketCount }) {
     return `${price},${cents}`
   }
 
-  // Update basket count in the basket in Product
-  const addToBasket = (count) => {
-    updateBasketCount(count)
+  // Update basket count of the product.id selected in the basket in Product
+  const addToBasket = () => {
+    updateBasketCount(cart.length)
   }
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || []
     setCart(storedCart)
+    setQuantity(1);
   }, [])
 
   useEffect(() => {
@@ -47,86 +60,83 @@ export default function ItemProduct({ updateBasketCount }) {
 
   return (
     <Fragment>
-      {products &&
-        products.map((product) => (
-          <div className='product' key={product.id}>
-            <div className='itemProduct'>
-              <div className='product-image'>
-                <img src={product.img_url} alt={product.name} />
-              </div>
-              <div className='product-title'>
-                <h1>{product.name}</h1>
-                <h6>
-                  {product.power} W // Packet of {product.quantity}
-                </h6>
-              </div>
-              <div className='container-flex'>
-                <div className='product-price'>
-                  <h2>£ {formatPrice(product.price)}</h2>
-                </div>
-                <div className='product-buttons'>
-                  <button
-                    className={`product-buttons remove ${cart.length === 1 ? 'disabled' : ''}`}
-                    onClick={() => removeFromCart(product.id)} disabled={cart.length === 1}>
-                    -
-                  </button>
-                  <p
-                    className='product-buttons-result'
-                    title='Current quantity'>
-                    {' '}
-                    <span>QYT</span>
-                    {cart.length}
-                  </p>
-                  <button
-                    className='product-buttons add'
-                    onClick={() => addToCart(product.id)}>
-                    +
-                  </button>
-                </div>
-              </div>
+      <div className='product' key={product.id}>
+        <div className='itemProduct'>
+          <div className='product-image'>
+            <img src={product.img_url} alt={product.name} />
+          </div>
+          <div className='product-title'>
+            <h1>{product.name}</h1>
+            <h6>
+              {product.power} W // Packet of {product.quantity}
+            </h6>
+          </div>
+          <div className='container-flex'>
+            <div className='product-price'>
+              <h2>£ {formatPrice(product.price)}</h2>
+            </div>
+            <div className='product-buttons'>
               <button
-                className='product-add-basket'
-                onClick={() => addToBasket(cart.length)}>
+                className={`product-buttons remove ${
+                  quantity === 1 ? 'disabled' : ''
+                }`}
+                onClick={() => removeFromCart()}
+                disabled={quantity === 1}>
+                -
+              </button>
+              <p className='product-buttons-result' title='Current quantity'>
                 {' '}
-                Add to cart
+                <span>Qyt</span>
+                {quantity}
+              </p>
+              <button
+                className='product-buttons add'
+                onClick={() => addToCart()}>
+                +
               </button>
             </div>
-            <div className='product-container background'>
-              <h2>Description</h2>
-              <p>{product.description}</p>
-            </div>
-            <div className='product-container'>
-              <h2>Specification</h2>
-              <p>
-                {' '}
-                Brand <span>{product.brand}</span>
-              </p>
-              <p>
-                {' '}
-                Item weight <span>{product.weight}</span>
-              </p>
-              <p>
-                {' '}
-                Dimensions{' '}
-                <span>
-                  {product.height} {product.width} {product.length}
-                </span>
-              </p>
-              <p>
-                {' '}
-                Color <span>{product.colour}</span>
-              </p>
-            </div>
-            <div className='product-container background notabene'>
-              <p>
-                Octopus Energy Ltd is a company registered in England and Wales.
-                Registered number: 09263424. Registered office: 33 Holborn,
-                London, ECIN 2HT. Trading office: 20-24 Broadwick Street,
-                London, WIF 8HT
-              </p>
-            </div>
           </div>
-        ))}
+          <button
+            className='product-add-basket'
+            onClick={() => addToBasket()}>
+            {' '}
+            Add to cart
+          </button>
+        </div>
+        <div className='product-container background'>
+          <h2>Description</h2>
+          <p>{product.description}</p>
+        </div>
+        <div className='product-container'>
+          <h2>Specification</h2>
+          <p>
+            {' '}
+            Brand <span>{product.brand}</span>
+          </p>
+          <p>
+            {' '}
+            Item weight <span>{product.weight}</span>
+          </p>
+          <p>
+            {' '}
+            Dimensions{' '}
+            <span>
+              {product.height} {product.width} {product.length}
+            </span>
+          </p>
+          <p>
+            {' '}
+            Color <span>{product.colour}</span>
+          </p>
+        </div>
+        <div className='product-container background notabene'>
+          <p>
+            Octopus Energy Ltd is a company registered in England and Wales.
+            Registered number: 09263424. Registered office: 33 Holborn, London,
+            ECIN 2HT. Trading office: 20-24 Broadwick Street, London, WIF 8HT
+          </p>
+        </div>
+      </div>
     </Fragment>
   )
 }

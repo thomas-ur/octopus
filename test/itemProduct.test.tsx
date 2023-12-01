@@ -1,39 +1,37 @@
-import { render, fireEvent, screen, act } from '@testing-library/react'
-import ItemProduct from '../components/itemProduct'
+import { render, fireEvent, screen } from '@testing-library/react'
+import ItemProduct from '../components/ItemProduct'
+
 
 test('should be able to increase and decrease product quantity', async () => {
-  const { getAllByText, getAllByTitle } = render(
-    <ItemProduct updateBasketCount={0} />
+  const { getByText, getByTitle } = render(
+    <ItemProduct  product={1} updateBasketCount={1} />
   )
 
-  const increaseButtons = screen.getAllByText('+')
+  const increaseButton = getByText('+');
+  const currentQuantity = getByTitle('Current quantity');
 
-  const currentQuantityElements = getAllByTitle('Current quantity')
-  const currentQuantity = currentQuantityElements[0];
-  expect(currentQuantity).toHaveTextContent('QYT0')
+  expect(currentQuantity).toHaveTextContent('Qyt1');
 
-  fireEvent.click(increaseButtons[0])
-  expect(currentQuantity).toHaveTextContent('QYT1')
+  fireEvent.click(increaseButton);
+  expect(currentQuantity).toHaveTextContent('Qyt2');
 
-  const decreaseQuantity = getAllByText('-')
+  const decreaseButton = getByText('-');
 
-  fireEvent.click(decreaseQuantity[0])
-  expect(currentQuantity).toHaveTextContent('QYT0')
+  fireEvent.click(decreaseButton);
+  expect(currentQuantity).toHaveTextContent('Qyt1');
 })
 
 test('should be able to add items to the basket', async () => {
   const updateBasketCountMock = jest.fn()
   const { getAllByText } = render(
-    <ItemProduct updateBasketCount={updateBasketCountMock} />
+    <ItemProduct product={1} updateBasketCount={updateBasketCountMock} />
   )
 
   const increaseButtons = screen.getAllByText('+')
-  fireEvent.click(increaseButtons[0])
-  fireEvent.click(increaseButtons[0])
   fireEvent.click(increaseButtons[0])
 
   const addToCartButton = screen.getAllByText('Add to cart')
   fireEvent.click(addToCartButton[0])
 
-  expect(updateBasketCountMock).toHaveBeenCalledWith(3)
+  expect(updateBasketCountMock).toHaveBeenCalledWith(1)
 })

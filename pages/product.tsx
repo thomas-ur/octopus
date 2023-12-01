@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import ItemProduct from '../components/itemProduct'
+import React, { useEffect, useState } from 'react'
+import ItemProduct from '../components/ItemProduct'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import db from '../server/db'
+import Link from 'next/link'
 
 const Product = () => {
+  const [products] = useState(db.products)
   const [basketCount, setBasketCount] = useState(0)
 
   // Callback function to update the basket count
@@ -12,26 +15,47 @@ const Product = () => {
     setBasketCount(count)
   }
 
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setBasketCount(storedCart.length);
+  }, []);
+
   return (
     <section className='background-product'>
       <div className='header-product'>
         <h1>
           <img src='/octopus-logo.svg' alt='Octopus Energy Logo' />
         </h1>
-        <div className='basket'>
-          {basketCount > 0 && (
-            <span className='basket-count'>{basketCount}</span>
-          )}
-          <img src='/basket.svg' alt='basket' />
-        </div>
+        <Link href='/results'>
+          <div className='basket'>
+            {basketCount > 0 && (
+              <span className='basket-count'>{basketCount}</span>
+            )}
+            <img src='/basket.svg' alt='basket' />
+          </div>
+        </Link>
       </div>
       <div className='product-slider'>
-        <Slider>
-          <ItemProduct updateBasketCount={updateBasketCount} />
+        <Slider arrows={false}>
+          {products &&
+            products.map((product) => (
+              <ItemProduct
+                key={product.id}
+                product={product}
+                updateBasketCount={updateBasketCount}
+              />
+            ))}
         </Slider>
       </div>
       <div className='product-flex'>
-        <ItemProduct updateBasketCount={updateBasketCount} />
+        {products &&
+          products.map((product) => (
+            <ItemProduct
+              key={product.id}
+              product={product}
+              updateBasketCount={updateBasketCount}
+            />
+          ))}
       </div>
     </section>
   )

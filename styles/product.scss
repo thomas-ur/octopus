@@ -103,7 +103,12 @@
                 border-radius: 20px;
             }
         }
-
+        .disabled {
+            color: var(--ice);
+            position: relative;
+            background: rgba(240, 80, 240, 0.8);
+            
+        }
         &-result {
             font-weight: bolder;
             position: relative;
@@ -119,7 +124,6 @@
                 left: 50%;
                 font-size: 12px;
                 transform: translateX(-50%);
-                text-transform: capitalize;
             }
 
             @media (min-width: $sm) {
