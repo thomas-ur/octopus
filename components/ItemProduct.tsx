@@ -1,15 +1,9 @@
 import React, { Fragment, useState } from 'react'
 import { basketAddProduct } from '../controller/basket'
-import classNames from 'classnames'
 import { Product } from '../store/product.type'
+import classNames from 'classnames'
 
-export default function ItemProduct({
-  product,
-  updateBasketCount,
-}: {
-  product: Product
-  updateBasketCount: () => void
-}) {
+export default function ItemProduct({product, updateBasketCount,}: { product: Product, updateBasketCount: () => void }) {
   const [quantity, setQuantity] = useState(1)
 
   // Function to add quantity

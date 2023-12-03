@@ -102,3 +102,11 @@ img {
   justify-content: space-between;
   align-items: center;
 }
+
+.back-button {
+  padding: 20px;
+}
+
+.back-button a {
+  color: var(--ice);
+}

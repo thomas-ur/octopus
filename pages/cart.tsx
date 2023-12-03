@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Basket, basketGetAllProduct } from '../controller/basket';
+import Link from 'next/link';
 
 const Cart = () => {
   const [basket, setBasket] = useState({} as Basket);
@@ -10,7 +11,10 @@ const Cart = () => {
 }, []);
 
   return (
-    <div>
+    <div className='cart'>
+      <div className='back-button'>
+        <Link href="/product">Get back</Link>
+      </div>
       <h1>Shopping Cart Items</h1>
       <ul>
       {Object.keys(basket).map((productId) => (
