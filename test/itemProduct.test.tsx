@@ -3,8 +3,9 @@ import ItemProduct from '../components/ItemProduct'
 
 
 test('should be able to increase and decrease product quantity', async () => {
+  const updateBasketCountMock = jest.fn()
   const { getByText, getByTitle } = render(
-    <ItemProduct  product={1} updateBasketCount={5} />
+    <ItemProduct  product={1} updateBasketCount={updateBasketCountMock} />
   )
 
   const increaseButton = getByText('+');
@@ -13,7 +14,7 @@ test('should be able to increase and decrease product quantity', async () => {
   expect(currentQuantity).toHaveTextContent('Qyt1');
 
   fireEvent.click(increaseButton);
-  expect(currentQuantity).toHaveTextContent('Qyt1');
+  expect(currentQuantity).toHaveTextContent('Qyt2');
 
   const decreaseButton = getByText('-');
 
@@ -23,15 +24,15 @@ test('should be able to increase and decrease product quantity', async () => {
 
 test('should be able to add items to the basket', async () => {
   const updateBasketCountMock = jest.fn()
-  const { getAllByText } = render(
+  const { getByText } = render(
     <ItemProduct product={1} updateBasketCount={updateBasketCountMock} />
   )
 
-  const increaseButtons = screen.getAllByText('+')
-  fireEvent.click(increaseButtons[0])
+  const increaseButtons = screen.getByText('+')
+  fireEvent.click(increaseButtons)
 
-  const addToCartButton = screen.getAllByText('Add to cart')
-  fireEvent.click(addToCartButton[0])
+  const addToCartButton = screen.getByText('Add to cart')
+  fireEvent.click(addToCartButton)
 
-  expect(updateBasketCountMock).toHaveBeenCalledWith(1)
+  expect(updateBasketCountMock).toHaveBeenCalledWith()
 })

@@ -1,39 +1,18 @@
 import React, { Fragment, useEffect, useState } from 'react'
+import { basketAddProduct } from '../controller/basket'
 
-export default function ItemProduct({ product, updateBasketCount }) {
-  const [cart, setCart] = useState([product])
+export default function ItemProduct({ product, updateBasketCount }: { product: any, updateBasketCount: () => void }) {
   const [quantity, setQuantity] = useState(1)
 
-  // Function to add a product to the cart
+  // Function to add quantity
   const addToCart = () => {
-    const existingProductIndex = cart.findIndex(
-      (item) => item.id === product.id
-    )
-
-    if (existingProductIndex !== -1) {
-      const updatedCart = [...cart]
-      updatedCart[existingProductIndex].quantity += 1
-      setCart(updatedCart)
-      setQuantity(updatedCart[existingProductIndex].quantity)
-    } else {
-      const updatedProduct = { ...product, quantity: 1 }
-      setCart([...cart, updatedProduct])
-      setQuantity(1)
-    }
+    setQuantity(quantity + 1)
   }
 
-  // Function to remove a product from the cart
+  // Function to remove quantity
   const removeFromCart = () => {
-    const existingProductIndex = cart.findIndex(
-      (item) => item.id === product.id
-    )
-
-    if (existingProductIndex !== -1) {
-      const updatedCart = [...cart]
-      updatedCart[existingProductIndex].quantity = Math.max(1, quantity - 1)
-      setCart(updatedCart)
-      setQuantity(updatedCart[existingProductIndex].quantity)
-    }
+    const newQuantity = Math.max(0, quantity - 1)
+    setQuantity(newQuantity)
   }
 
   // Function to format the price from product db.js
@@ -45,18 +24,9 @@ export default function ItemProduct({ product, updateBasketCount }) {
 
   // Update basket count of the product.id selected in the basket in Product
   const addToBasket = () => {
-    updateBasketCount(cart.length)
+    basketAddProduct(product, quantity)
+    updateBasketCount()
   }
-
-  useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || []
-    setCart(storedCart)
-    setQuantity(1);
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart))
-  }, [cart])
 
   return (
     <Fragment>
@@ -77,29 +47,26 @@ export default function ItemProduct({ product, updateBasketCount }) {
             </div>
             <div className='product-buttons'>
               <button
-                className={`product-buttons remove ${
-                  quantity === 1 ? 'disabled' : ''
-                }`}
-                onClick={() => removeFromCart()}
+                className={`product-buttons remove ${quantity === 1 ? 'disabled' : ''
+                  }`}
+                onClick={removeFromCart}
                 disabled={quantity === 1}>
                 -
               </button>
               <p className='product-buttons-result' title='Current quantity'>
-                {' '}
                 <span>Qyt</span>
                 {quantity}
               </p>
               <button
                 className='product-buttons add'
-                onClick={() => addToCart()}>
+                onClick={addToCart}>
                 +
               </button>
             </div>
           </div>
           <button
             className='product-add-basket'
-            onClick={() => addToBasket()}>
-            {' '}
+            onClick={addToBasket}>
             Add to cart
           </button>
         </div>
@@ -109,25 +76,10 @@ export default function ItemProduct({ product, updateBasketCount }) {
         </div>
         <div className='product-container'>
           <h2>Specification</h2>
-          <p>
-            {' '}
-            Brand <span>{product.brand}</span>
-          </p>
-          <p>
-            {' '}
-            Item weight <span>{product.weight}</span>
-          </p>
-          <p>
-            {' '}
-            Dimensions{' '}
-            <span>
-              {product.height} {product.width} {product.length}
-            </span>
-          </p>
-          <p>
-            {' '}
-            Color <span>{product.colour}</span>
-          </p>
+          <p>Brand <span> {product.brand}</span></p>
+          <p>Item weight <span>{ product.weight}</span></p>
+          <p>Dimensions<span> {product.height} {product.width} {product.length}</span></p>
+          <p>Color <span>{product.colour}</span></p>
         </div>
         <div className='product-container background notabene'>
           <p>

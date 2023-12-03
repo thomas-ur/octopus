@@ -5,20 +5,20 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import db from '../server/db'
 import Link from 'next/link'
+import { basketGetProductCount } from '../controller/basket'
 
 const Product = () => {
   const [products] = useState(db.products)
   const [basketCount, setBasketCount] = useState(0)
 
   // Callback function to update the basket count
-  const updateBasketCount = (count: number) => {
-    setBasketCount(count)
+  const updateBasketCount =() => {
+    setBasketCount(basketGetProductCount())
   }
 
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setBasketCount(storedCart.length);
-  }, []);
+    setBasketCount(basketGetProductCount())
+  }, [])
 
   return (
     <section className='background-product'>

@@ -58,7 +58,7 @@
         }
 
         @media (min-width: $sm) {
-            padding-bottom: 110px;
+            padding-bottom: 50px;
         }
     }
 
@@ -66,7 +66,7 @@
         font-size: 7.25vw;
 
         @media (min-width: $sm) {
-            font-size: 45px;
+            font-size: 30px;
         }
     }
 
@@ -142,18 +142,13 @@
         height: 55px;
         border-radius: 14px;
         margin-bottom: 25px;
-
-        button {
-            background: var(--sohoLights);
-            border: none;
-            font-size: 20px;
-            @media (min-width: $sm) {
-                font-size: 30px;
-            }
-        }
+        background: var(--sohoLights);
+        border: none;
+        font-size: 20px;
 
         @media (min-width: $sm) {
             height: 120px;
+            font-size: 30px;
             border-radius: 20px;
             margin-bottom: 40px;
         }

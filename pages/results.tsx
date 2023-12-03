@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { Basket, basketGetAllProduct } from '../controller/basket';
 
 const Results = () => {
-  const [cartItems, setCartItems] = useState([]);
+  const [basket, setBasket] = useState({} as Basket);
 
   useEffect(() => {
-    // Charger les données du localStorage lorsque le composant est monté
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    setCartItems(storedCart);
-  }, []);
+    //Get all Product
+    setBasket(basketGetAllProduct())
+}, []);
 
   return (
     <div>
       <h1>Shopping Cart Items</h1>
       <ul>
-        {cartItems.map((item) => (
-          <li key={item.id}>
-            Product ID: {item.id}, Quantity: {item.quantity}
+      {Object.keys(basket).map((productId) => (
+          <li key={productId}>
+            Product ID: {productId}, Quantity: {basket[productId]}
           </li>
         ))}
       </ul>
