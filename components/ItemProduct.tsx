@@ -1,7 +1,15 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { basketAddProduct } from '../controller/basket'
+import classNames from 'classnames'
+import { Product } from '../store/product.type'
 
-export default function ItemProduct({ product, updateBasketCount }: { product: any, updateBasketCount: () => void }) {
+export default function ItemProduct({
+  product,
+  updateBasketCount,
+}: {
+  product: Product
+  updateBasketCount: () => void
+}) {
   const [quantity, setQuantity] = useState(1)
 
   // Function to add quantity
@@ -16,7 +24,7 @@ export default function ItemProduct({ product, updateBasketCount }: { product: a
   }
 
   // Function to format the price from product db.js
-  const formatPrice = (priceInCents) => {
+  const formatPrice = (priceInCents: number) => {
     const price = Math.floor(priceInCents / 100)
     const cents = priceInCents % 100
     return `${price},${cents}`
@@ -38,7 +46,7 @@ export default function ItemProduct({ product, updateBasketCount }: { product: a
           <div className='product-title'>
             <h1>{product.name}</h1>
             <h6>
-              {product.power} W // Packet of {product.quantity}
+              {product.power} // Packet of {product.quantity}
             </h6>
           </div>
           <div className='container-flex'>
@@ -47,26 +55,23 @@ export default function ItemProduct({ product, updateBasketCount }: { product: a
             </div>
             <div className='product-buttons'>
               <button
-                className={`product-buttons remove ${quantity === 1 ? 'disabled' : ''
-                  }`}
+                className={classNames('product-buttons', 'remove', {
+                  disabled: quantity == 1,
+                })}
                 onClick={removeFromCart}
                 disabled={quantity === 1}>
-                -
+               <span>-</span> 
               </button>
               <p className='product-buttons-result' title='Current quantity'>
-                <span>Qyt</span>
+                <span>Qty</span>
                 {quantity}
               </p>
-              <button
-                className='product-buttons add'
-                onClick={addToCart}>
-                +
+              <button className='product-buttons add' onClick={addToCart}>
+              <span>+</span> 
               </button>
             </div>
           </div>
-          <button
-            className='product-add-basket'
-            onClick={addToBasket}>
+          <button className='product-add-basket' onClick={addToBasket}>
             Add to cart
           </button>
         </div>
@@ -75,18 +80,51 @@ export default function ItemProduct({ product, updateBasketCount }: { product: a
           <p>{product.description}</p>
         </div>
         <div className='product-container'>
-          <h2>Specification</h2>
-          <p>Brand <span> {product.brand}</span></p>
-          <p>Item weight <span>{ product.weight}</span></p>
-          <p>Dimensions<span> {product.height} {product.width} {product.length}</span></p>
-          <p>Color <span>{product.colour}</span></p>
-        </div>
-        <div className='product-container background notabene'>
-          <p>
-            Octopus Energy Ltd is a company registered in England and Wales.
-            Registered number: 09263424. Registered office: 33 Holborn, London,
-            ECIN 2HT. Trading office: 20-24 Broadwick Street, London, WIF 8HT
-          </p>
+          <h2>specifications</h2>
+          <table className='product-specification'>
+            <tbody>
+              <tr>
+                <td>
+                  <span>Brand</span>
+                </td>
+                <td>
+                  <span>{product.brand}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Item weight (g)</span>
+                </td>
+                <td>
+                  <span>{product.weight}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Dimensions</span>
+                </td>
+                <td>
+                  <span>{product.height} x {product.width} x {product.length}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Item Model number</span>
+                </td>
+                <td>
+                  <span>{product.model_code} </span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span>Color</span>
+                </td>
+                <td>
+                  <span>{product.colour}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </Fragment>

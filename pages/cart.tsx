@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Basket, basketGetAllProduct } from '../controller/basket';
 
-const Results = () => {
+const Cart = () => {
   const [basket, setBasket] = useState({} as Basket);
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const Results = () => {
   );
 };
 
-export default Results;
+export default Cart;

@@ -1,9 +1,10 @@
+import { Product } from "../store/product.type"
 
 export interface Basket {
-    [key: number]: { quantity: number; name: string }
+    [key: number]: number
 }
 
-export function basketAddProduct(product, quantity) {
+export function basketAddProduct(product: Product, quantity: number) {
     const basket = basketGetAllProduct()
     if (basket[product.id]) {
         basket[product.id] += quantity
@@ -22,6 +23,5 @@ export function basketGetProductCount(): number {
 export function basketGetAllProduct(): Basket {
     const basketStorage = localStorage.getItem('basket')
     const basket = (JSON.parse(basketStorage) || {}) as Basket
-    console.log("basket = " + JSON.stringify(basket))
     return basket
 }

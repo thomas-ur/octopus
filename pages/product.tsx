@@ -26,7 +26,7 @@ const Product = () => {
         <h1>
           <img src='/octopus-logo.svg' alt='Octopus Energy Logo' />
         </h1>
-        <Link href='/results'>
+        <Link href='/cart'>
           <div className='basket'>
             {basketCount > 0 && (
               <span className='basket-count'>{basketCount}</span>
@@ -57,6 +57,13 @@ const Product = () => {
             />
           ))}
       </div>
+      <div className='product-container background notabene'>
+          <p>
+            Octopus Energy Ltd is a company registered in England and Wales.
+            Registered number: 09263424. Registered office: 33 Holborn, London,
+            ECIN 2HT. Trading office: 20-24 Broadwick Street, London, WIF 8HT
+          </p>
+        </div>
     </section>
   )
 }
